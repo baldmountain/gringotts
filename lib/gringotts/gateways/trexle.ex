@@ -87,7 +87,7 @@ defmodule Gringotts.Gateways.Trexle do
 
   use Gringotts.Gateways.Base
   use Gringotts.Adapter, required_config: [:api_key]
-  import Poison, only: [decode: 1]
+  import Jason, only: [decode: 1]
   alias Gringotts.{Address, CreditCard, Money, Response}
 
   @doc """

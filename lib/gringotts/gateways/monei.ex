@@ -146,7 +146,7 @@ defmodule Gringotts.Gateways.Monei do
 
   use Gringotts.Gateways.Base
   use Gringotts.Adapter, required_config: [:userId, :entityId, :password]
-  import Poison, only: [decode: 1]
+  import Jason, only: [decode: 1]
   alias Gringotts.{CreditCard, Money, Response}
 
   @base_url "https://test.monei-api.net"

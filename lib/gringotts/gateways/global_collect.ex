@@ -150,7 +150,7 @@ defmodule Gringotts.Gateways.GlobalCollect do
   # `required_config` list
   use Gringotts.Adapter, required_config: [:secret_api_key, :api_key_id, :merchant_id]
 
-  import Poison, only: [decode: 1]
+  import Jason, only: [decode: 1]
 
   alias Gringotts.{CreditCard, Money, Response}
 
@@ -390,7 +390,7 @@ defmodule Gringotts.Gateways.GlobalCollect do
 
   defp commit(method, path, params, opts) do
     headers = create_headers(path, opts)
-    data = Poison.encode!(params)
+    data = Jason.encode!(params)
     merchant_id = opts[:config][:merchant_id]
     url = "#{@base_url}#{merchant_id}/#{path}"
 

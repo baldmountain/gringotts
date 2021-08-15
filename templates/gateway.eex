@@ -3,7 +3,7 @@ defmodule Gringotts.Gateways.<%= gateway_module %> do
   [<%= gateway %>][home] gateway implementation.
 
   ## Instructions!
-  
+
   ***This is an example `moduledoc`, and suggests some items that should be
   documented in here.***
 
@@ -18,7 +18,7 @@ defmodule Gringotts.Gateways.<%= gateway_module %> do
   and tag it with the label `template`.
 
   ***Actual docs begin below this line!***
-  
+
   --------------------------------------------------------------------------------
 
   > List features that have been implemented, and what "actions" they map to as
@@ -29,7 +29,7 @@ defmodule Gringotts.Gateways.<%= gateway_module %> do
 
   Most `Gringotts` API calls accept an optional `Keyword` list `opts` to supply
   optional arguments for transactions with the gateway.
-  
+
   > List all available (ie, those that will be supported by this module) keys, a
   > description of their function/role and whether they have been implemented
   > and tested.
@@ -41,18 +41,18 @@ defmodule Gringotts.Gateways.<%= gateway_module %> do
   `required_keys` (like authentication info) to the configuration.
   <%= if required_config_keys != [] do %>
   > Here's how the secrets map to the required configuration parameters for <%= gateway %>:
-  > 
+  >
   > | Config parameter | <%= gateway %> secret   |
   > | -------          | ----           |
   <%= for key <- required_config_keys do %>> | `<%= inspect(key) %>`     | **<%= Macro.camelize("#{key}") %>**  |
   <% end %><% end %>
   > Your Application config<%= if required_config_keys != [] do %> **must include the `<%= inspect(required_config_keys) %>` field(s)** and<% end %> would look
   > something like this:
-  > 
+  >
   >     config :gringotts, Gringotts.Gateways.<%= gateway_module %>,
   <%= for key <- required_config_keys do %>>         <%= "#{key}" %>: "your_secret_<%= "#{key}" %>"
   <% end %>
-  
+
   ## Scope of this module
 
   > It's unlikely that your first iteration will support all features of the
@@ -94,15 +94,15 @@ defmodule Gringotts.Gateways.<%= gateway_module %> do
   """
 
   # The Base module has the (abstract) public API, and some utility
-  # implementations.  
+  # implementations.
   use Gringotts.Gateways.Base
 
   # The Adapter module provides the `validate_config/1`
   # Add the keys that must be present in the Application config in the
   # `required_config` list
   use Gringotts.Adapter, required_config: <%= inspect(required_config_keys) %>
-  
-  import Poison, only: [decode: 1]
+
+  import Jason, only: [decode: 1]
 
   alias Gringotts.{Money,
                    CreditCard,
@@ -118,7 +118,7 @@ defmodule Gringotts.Gateways.<%= gateway_module %> do
   > 1. describe what are the important fields in the Response struct
   > 2. mention what a merchant can do with these important fields (ex:
   > `capture/3`, etc.)
-  
+
   ## Note
 
   > If there's anything noteworthy about this operation, it comes here.
@@ -253,7 +253,7 @@ defmodule Gringotts.Gateways.<%= gateway_module %> do
   ###############################################################################
   #                                PRIVATE METHODS                              #
   ###############################################################################
-  
+
   # Makes the request to <%= gateway %>'s network.
   # For consistency with other gateway implementations, make your (final)
   # network request in here, and parse it using another private method called

@@ -351,7 +351,8 @@ defmodule Gringotts.Gateways.Paymill do
   end
 
   defp respond({:ok, %{status_code: 200, body: body}}) do
-    case Poison.decode(body) do
+    # It seems like paymill will return newlines in strings
+    case Jason.decode(body |> String.replace("\n", "", global: true)) do
       {:ok, parsed_resp} ->
         gateway_code = get_either(parsed_resp, @response_code_paths)
 
@@ -369,7 +370,7 @@ defmodule Gringotts.Gateways.Paymill do
            fraud_review: get_either(parsed_resp, @fraud_paths)
          }}
 
-      :error ->
+      {:error, val} ->
         {:error,
          %Response{status_code: 200, raw: body, reason: "could not parse paymill response"}}
     end
