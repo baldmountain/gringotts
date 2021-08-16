@@ -150,8 +150,6 @@ defmodule Gringotts.Gateways.GlobalCollect do
   # `required_config` list
   use Gringotts.Adapter, required_config: [:secret_api_key, :api_key_id, :merchant_id]
 
-  import Jason, only: [decode: 1]
-
   alias Gringotts.{CreditCard, Money, Response}
 
   @brand_map %{
@@ -426,7 +424,7 @@ defmodule Gringotts.Gateways.GlobalCollect do
   defp respond(global_collect_response)
 
   defp respond({:ok, %{status_code: code, body: body}}) when code in [200, 201] do
-    case decode(body) do
+    case Jason.decode(body) do
       {:ok, results} ->
         {
           :ok,
@@ -456,7 +454,7 @@ defmodule Gringotts.Gateways.GlobalCollect do
   end
 
   defp respond({:ok, %{status_code: status_code, body: body}}) do
-    {:ok, results} = decode(body)
+    {:ok, results} = Jason.decode(body)
     message = Enum.map(results["errors"], fn x -> x["message"] end)
     detail = List.to_string(message)
     {:error, Response.error(status_code: status_code, message: detail, raw: results)}
